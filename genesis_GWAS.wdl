@@ -1,3 +1,5 @@
+version 1.0
+
 task genesis_nullmodel {
 	String outcome_name
 	String? outcome_type
