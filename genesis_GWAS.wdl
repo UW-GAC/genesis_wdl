@@ -1,6 +1,7 @@
 version 1.0
 
 task genesis_nullmodel {
+	input {
 	String outcome_name
 	String? outcome_type
 	String? covariates_string
@@ -17,6 +18,7 @@ task genesis_nullmodel {
 
 	Int? memory
 	Int? disk
+	}
 
 	command {
 		R --vanilla --args ${outcome_name} ${default="Continuous" outcome_type} ${default="NA" covariates_string} ${pheno_file} ${genotype_file} ${results_file} ${default="NO_KINSHIP_FILE" kinship_matrix} ${default="ID" pheno_id} ${default="NA" conditional} ${default="NA" het_varsIn} ${default="none" transform} ${default="all" transform_rankNorm} ${default="none" transform_rescale} < /genesis_wdl/genesis_nullmodel.R
@@ -34,6 +36,7 @@ task genesis_nullmodel {
 }
 
 task genesis_tests {
+	input {
 	File? agg_file
 	Float? top_maf
 	String? test_stat
@@ -60,6 +63,7 @@ task genesis_tests {
 
 	Int? memory
 	Int? disk
+	}
 
 	command {
 		R --vanilla --args ${default="NONE" agg_file} ${default="1" top_maf} ${default="Score" test_stat} ${test_type} ${default="5" min_mac} ${default="FALSE" weights} ${default="FALSE" weights_col} ${default="30" user_cores} ${default="0" window} ${default="0" step} ${genotype_file} ${null_model} ${results_file} ${default="hg38" genome_build} ${default="T" pass_only} ${default="F" imputed} ${default="200" neig} ${default="500" ntrace} ${default="NULL" interaction} ${default="F" return_variants} < /genesis_wdl/genesis_tests.R
@@ -78,6 +82,7 @@ task genesis_tests {
 }
 
 task summarize {
+	input {
 	Float? pval_threshold
 	String results_file
 	String test_type
@@ -86,6 +91,7 @@ task summarize {
 
 	Int? memory
 	Int? disk
+	}
 
 	command {
 		R --vanilla --args ${default="0.0001" pval_threshold} ${results_file} ${test_type} ${default="NA" agg_file} ${sep="," assoc_files} < /genesis_wdl/summarize_GWAS.R
@@ -106,6 +112,7 @@ task summarize {
 }
 
 workflow genesis_gwas_wf {
+	input {
 	# null model inputs
 	String this_outcome_name
 	String? this_outcome_type
@@ -148,6 +155,7 @@ workflow genesis_gwas_wf {
 	Float? this_pval_threshold
 	Int? this_summarize_memory
 	Int? this_summarize_disk
+	}
 	
 
 	# Workflow metadata
